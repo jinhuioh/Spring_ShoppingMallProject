@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="productlike">
+
+	<!-- 쿼리없이 가공으로 전체 하트리스트 만들었음. -->
+	<!-- 메인리스트 각 상품의 전체 총 좋아요 개수  -->
+  <!-- <select id="MainLikeCountList" parameterType="likeVO" resultType="int">
+	   SELECT COUNT(like_idx)
+	   FROM productlike
+	   WHERE product_idx=#{product_idx}
+  </select> -->
+
+  <!--  test sql : SELECT COUNT(like_idx) FROM productlike WHERE product_idx=3  -->
+
+	<!-- 상품 상세보기에서 유저들이 보는 하트 좋아요. -->
+
+  <!-- product_idx로 join한 뒤 product_like의 총 개수를 보여준다. -->
+  <!-- product 테이블에서 product_like 컬럼이 없어졌으므로 서비스에서 컬렉션 2차 재가공한다. -->
+  
+  
+  <!-- product_idx 상품마다 좋아요 총합. -->
+  <!-- > &gt  < &lt 부등호 나타낼 때 바꿔서 나타내야 함. -->
+  <select id="SumProductLike" parameterType="productpageVO" resultType="java.util.Map">
+  	select
+		product_idx , sum(likecheck) as likecheck 
+	from productlike 
+	group by product_idx , likecheck 
+	 <![CDATA[ 
+	having #{beginRow} <=product_idx <= #{rowPerPage}
+	]]> 
+  </select>
+  
+  	<!-- 	
+	select
+	product_idx ,sum(likecheck) as likecheck 
+	from productlike 
+		group by product_idx , likecheck 
+		having product_idx <=20
+	
+	 -->
+  
+  <!-- member가 빈 하트에서 버튼을 누르면 속이 찬 하트로 바뀌면서 데이터값이 들어감. -->
+  <insert id = "createMemberLike" parameterType="likeVO">
+  	
+  	insert into 
+  		productlike(like_idx, user_id, product_idx, likecheck)
+  	values (null, #{user_id}, #{product_idx}, 1)
+  	
+  </insert>
+  
+  <!-- insert into 
+  			productlike(like_idx, user_id, product_idx, likecheck)
+  		values (null, 'aaabbb', 4, 1)
+   -->
+  
+  
+  <!-- could not find parameter map 에러 : mybatis에서 더 이상 지원하지 않는 parameterMap을 사용하면 나타나는 에러 -->
+  <!-- 상세보기에서 이전에 회원이 그 상품에 맞는 좋아요를 눌렀는지 안 눌렀는지 보여주는 것. -->
+  <select id = "selectOneLike" parameterType="java.util.Map" resultType="likeVO">
+	  select * from 
+	  		productlike 
+	  where 	
+	 		user_id = #{user_id} and 
+	  		product_idx = #{product_idx}
+  </select>
+  
+  <!--   select * from 
+  		productlike 
+   where 	
+ 		user_id = 'aaabbb' and 
+  		product_idx = 4
+   -->	
+   <select id = "selectOneLikeCount" parameterType="java.util.Map" resultType="int">
+	  select count(*) as likecheck from 
+	  		productlike 
+	  where 	
+	 		user_id = #{user_id} and 
+	  		product_idx = #{product_idx}
+  </select>
+  
+  <!-- 	  select count(*) from 
+	  		productlike 
+	  where 	
+	 		user_id = 'aaabbb' and 
+	  		product_idx = 3
+    -->
+   
+  
+  <delete id = "revertMemberLike" parameterType="java.util.Map">
+  	
+  delete from 
+  			productlike 
+  where user_id = #{user_id} and product_idx = #{product_idx}
+  
+  </delete>
+  
+  <!-- 
+   delete from 
+   		productlike 
+   where user_id = 'aaabbb' and product_idx = 4
+   -->
+   
+   <insert id = "insertMemberLike" parameterType="java.util.Map">
+   	insert ignore into 
+  		productlike(user_id, product_idx, likecheck)
+  	values (#{user_id}, #{product_idx}, 1)
+   </insert>
+
+   
+   <!-- insert into 
+  		productlike(like_idx, user_id, product_idx, likecheck)
+  	values (null, #{user_id}, #{product_idx}, 1)
+  	 -->
+
+
+	<!-- insert ignore into 
+  		productlike(user_id, product_idx, likecheck)
+  	values ('jack', 4, 1)   
+   -->
+  <select id="productIdxByLike" resultType="java.util.Map">
+    select
+		product_idx , sum(likecheck) as likecheck 
+	from productlike 
+	group by product_idx , likecheck order by likecheck desc
+	limit 0, 10
+  </select>
+  
+  <!-- 좋아요 페이지 리스트를 위한 sql -->
+ 
+
+ <select id="myProductLike" resultType = "java.util.Map" parameterType="String">
+	 select *
+	 from product p inner join productlike p2 
+	 on p.product_idx = p2.product_idx 
+	 where user_id = #{user_id}
+ </select>
+ 
+  
+ <!--   select *
+ from product p
+ inner join productlike p2
+ on p.product_idx  = p2.product_idx 
+ where user_id = 'john'
+  --> 
+  
+  
+  
+  
+
+</mapper>

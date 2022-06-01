@@ -1,0 +1,28 @@
+@charset "UTF-8";
+
+body {
+    font-family:"Lucida Grande","Droid Sans",Arial,Helvetica,sans-serif;
+}
+.legend {
+    border: 1px solid #555555;
+    border-radius: 5px 5px 5px 5px;
+    font-size: 0.8em;
+    margin: 10px;
+    padding: 8px;
+}
+.bld {
+    font-weight: bold;
+}
+canvas#radar-chart {
+	border: 1px;
+	position: absolute;
+	top: 50%;
+	left: 60%;
+	transform: translate(-50%,-50%);
+}
+.chart { 
+	position: absolute; top:50%; left: 50%; margin-left: -400px;
+}
+.wordcloud{
+	position: absolute; top:30%; left: 50%; margin-left: -150px;
+}
