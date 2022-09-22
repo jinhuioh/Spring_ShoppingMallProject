@@ -68,7 +68,7 @@
 			} else if ($('#name').val() == '') {
 				$('#nac').text('이름을 입력하세요.');
 				//핸드폰 번호
-			} else if ($('#tel').val().length <= 10) {// 11보다 작으면 번호 다시 입력, 아래 input에 maxlength="11"을 지정해주어 11글자가 최대가 되도록 구현			
+			} else if ($('#tel').val().length <= 10) {//11보다 작으면 번호 다시 입력, 아래 input에 maxlength="11"을 지정해주어 11글자가 최대가 되도록 구현			
 				$('#tec').text('번호를  제대로 입력하세요.');
 			} else if (isNaN($('#tel').val())) {//핸드폰번호는 숫자만 가능isNaN=not a number		
 				$('#tec').text('번호를 다시 입력하세요.');

@@ -27,10 +27,16 @@ public interface MemeberInter {
 	// mypage구현
 	MemberVO myPage(MemberVO vo);
 
-	//	관리자가 회원전체 검색
-	List<MemberVO> readAll(MemberVO vo);
 
 	//	관리자가 회원검색
 	MemberVO readOne(MemberVO vo);
+	
+	//	페이징처리-----------------------------------
+//	public List<MemberVO>getList(MemberVO vo);
 
+	//	관리자가 회원전체 검색
+	List<MemberVO> readAll(MemberVO vo);
+	
+	public int getListCnt(MemberVO vo);
+	
 }

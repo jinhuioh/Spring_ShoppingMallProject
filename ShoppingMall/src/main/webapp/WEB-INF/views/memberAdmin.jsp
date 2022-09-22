@@ -27,13 +27,30 @@
 			location.href = "productList.jsp";
 		})
 	});
+	/* 페이징 처리 함수 =====================================================*/
+	function fn_go_page(pageNo) {
+		$("#pageIndex").val(pageNo);
+		$("#listForm").submit();
+		return false;
+	}
+	/* 검색함수 */
+	function fn_search() {
+		$("#pageIndex").val("1");
+		$("#listForm").submit();
+		return false;
+	}
 </script>
 </head>
 <body>
+<!-- 페이징처리 총 게시물 수==================================================== -->
+	<div></div>
+	
 	<div id="top">
 		<jsp:include page="../../top.jsp"></jsp:include>
 	</div>
 	<h3>회원관리</h3>
+	<h4>총회원수 ${totCnt} / 페이지 (${vo.pageIndex} / ${totalPageCnt})</h4>
+	
 	<button type="button" id="mainPage" class="btn btn-info" style="font-size:20px;">메인페이지로</button>
 	<a href="memberAdmin">
 		<button class="btn btn-info" style="font-size:20px;">회원전체검색</button>
@@ -59,8 +76,8 @@
 			<td class="left">주소</td>
 			<td class="left">레벨</td>
 		</tr>
-		<c:forEach items="${list}" var="one">
-			<!-- var="one"는  items="${list}"를 지칭해주는 말이다. ${list}를 one이라고 쓰겠다는 의미.-->
+		<c:forEach items="${list}" var="one"><!-- 컨트롤러에 List MemberPageList 가져옴 -->
+			<!-- var="one"는  items="${MemberPageList}"를 지칭해주는 말이다. ${MemberPageList}를 one이라고 쓰겠다는 의미.-->
 			<tr>
 				<td class="right">${one.user_id}</td>
 				<td class="right"><a href="memberOne?user_id=${one.user_id}">${one.user_name}</a></td>
@@ -74,5 +91,45 @@
 			</tr>
 		</c:forEach>
 	</table>
+		<!-- Paging[s] =========================================================-->
+	
+	<div class="col-sm-12 col-md-7" style="text-align:right">
+	<div class="dataTables_paginate paging_simple_numbers" id="dataTable_paginate">
+	  <ul class="pagination">
+	  
+	  <!-- 이전 페이지 버튼생성 (현재 페이지에서 -1)-->
+	  <c:if test="${vo.prev}">
+	  <li class="paginate_button page-item previous" id="dataTable_previous">
+	 		 <a href="javascript:void(0);" onclick="fn_go_page(${vo.startDate - 1});
+	 		  return false;" aria-controls="dataTable" data-dt-idx="0" tabindex="0"
+	 		   class="page-link">Previous</a>
+	  </li>
+	  </c:if>
+	  
+ 	  <!-- 페이지 버튼생성 -->
+	  <c:forEach var="num" begin="${vo.startDate}" end="${vo.endDate}">
+	  <li class="paginate_button page-item">
+	 		 <a href="javascript:void(0);" onclick="fn_go_page(${num});
+	 		  return false;" aria-controls="dataTable" data-dt-idx="0" tabindex="0"
+	 		   class="page-link">${num}</a>
+	  </li>
+	  </c:forEach>
+	  
+	  <!-- 다음 페이지 버튼생성 (현재 페이지 +1) -->
+	  <c:if test="${vo.next}">
+	  <li class="paginate_button page-item next" id="dataTable_next">
+	 		 <a href="javascript:void(0);" onclick="fn_go_page(${vo.endDate + 1}); 
+	 		 return false;" aria-controls="dataTable" data-dt-idx="0" tabindex="0"
+	 		  class="page-link">Next</a>
+	  </li>
+	  </c:if>
+	  </ul>
+	</div>
+	</div>
+	<!-- Paging[e] =========================================================-->
+	 <!-- form안에 input hidden으로 pageIndex 값을 넣어줘야 서버로 들고갈 수 있다.-->
+	<form method="get"  id="listForm" action="memberAdmin">
+	<input type="hidden" id="pageIndex" name="pageIndex" val="" />
+	</form>
 </body>
 </html>

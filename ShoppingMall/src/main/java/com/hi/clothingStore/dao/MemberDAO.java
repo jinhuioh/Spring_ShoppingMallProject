@@ -1,15 +1,24 @@
+//Member impliments으로  MemberInter에서 선언한 메소드와 변수를 MemberDAO에서 구현해주자.
+//impliments 안함. 그냥 dao만 구현.(MemberInter만들기만 하고 쓰지않음)
+//의존성 없앰.
 package com.hi.clothingStore.dao;
 
 import java.util.List;
+
+import javax.inject.Inject;
+
+import org.apache.catalina.mapper.Mapper;
+import org.apache.ibatis.session.SqlSession;
 import org.mybatis.spring.SqlSessionTemplate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import com.hi.clothingStore.vo.MemberVO;
 
 @Component
-public class MemberDAO implements MemeberInter {
+public class MemberDAO {
 
 	@Autowired
 	SqlSessionTemplate my;
@@ -70,15 +79,27 @@ public class MemberDAO implements MemeberInter {
 		return my.selectOne("member.myPage", vo);
 	}
 
-//	관리자가 회원전체 검색
+//	관리자가 회원조건&전체 검색
 	public List<MemberVO> readAll(MemberVO vo) {
-		System.out.println("readALl DAO>> " + vo);
+		System.out.println("readAll DAO(멤머dao)>> " + vo);
 		return my.selectList("member.readAll", vo);// 리스트가 리턴값이기 때문에 vo를 써주지 않는다.
 	}
 
-//	관리자가 회원검색
+//	관리자가 회원검색(회원 개인 상세페이지 구현)
 	public MemberVO readOne(MemberVO vo) {
 		return my.selectOne("member.readOne", vo);//xml에 member.readOne의로 간다.
 	}
+
+// 페이징 처리 ================================================
+	
+//	public List<MemberVO> getList(MemberVO searchVo){
+//		System.out.println("searchVo_MemberDAO출력1 " + searchVo);
+//		return my.selectList("member.getList", searchVo);
+//	};
+	//	전체 회원수(int값으로 넘어옴)
+	public int getListCnt(MemberVO vo) {
+		System.out.println("getListCnt(MemberDAO페이지수)" + vo);//넘어가는게 없음..
+		return my.selectOne("member.getListCnt", vo);
+	};
 	
 }

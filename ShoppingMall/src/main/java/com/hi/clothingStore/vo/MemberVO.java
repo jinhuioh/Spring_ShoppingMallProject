@@ -1,8 +1,8 @@
 package com.hi.clothingStore.vo;
 
 import java.sql.Timestamp;
-
-public class MemberVO {
+// MemberPageVO를 extends.
+public class MemberVO extends MemberPageVO {
 	private String user_id;
 	private String user_pw;
 	private String user_name;
@@ -72,5 +72,9 @@ public class MemberVO {
 		return "MemberVO [user_id=" + user_id + ", user_pw=" + user_pw + ", user_name=" + user_name + ", user_age="
 				+ user_age + ", user_tel=" + user_tel + ", user_tag=" + user_tag + ", user_addr=" + user_addr
 				+ ", level=" + level + ", keyword=" + keyword + "]";
+	}
+	public void setQustr() {
+		// TODO Auto-generated method stub
+		
 	}
 }
